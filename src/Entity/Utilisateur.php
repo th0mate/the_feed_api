@@ -68,6 +68,17 @@ class Utilisateur implements UserInterface/*, PasswordAuthenticatedUserInterface
     #[ApiProperty(writable: false)]
     private ?bool $premium = false;
 
+    /**
+     * @var Collection<int, Publication>
+     */
+    #[ORM\OneToMany(targetEntity: Publication::class, mappedBy: 'auteur', orphanRemoval: true)]
+    private Collection $publications;
+
+    public function __construct()
+    {
+        $this->publications = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -179,5 +190,35 @@ class Utilisateur implements UserInterface/*, PasswordAuthenticatedUserInterface
         if ($index !== false) {
             unset($this->roles[$index]);
         }
+    }
+
+    /**
+     * @return Collection<int, Publication>
+     */
+    public function getPublications(): Collection
+    {
+        return $this->publications;
+    }
+
+    public function addPublication(Publication $publication): static
+    {
+        if (!$this->publications->contains($publication)) {
+            $this->publications->add($publication);
+            $publication->setAuteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removePublication(Publication $publication): static
+    {
+        if ($this->publications->removeElement($publication)) {
+            // set the owning side to null (unless already changed)
+            if ($publication->getAuteur() === $this) {
+                $publication->setAuteur(null);
+            }
+        }
+
+        return $this;
     }
 }
