@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Post;
 use App\Repository\PublicationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -23,7 +24,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Delete(),
         new GetCollection(),
     ],
-    order : ["datePublication" => "DESC"],
+    normalizationContext: ["groups" => ["utilisateur:read"]],
+    order: ["datePublication" => "DESC"],
 )]
 #[ORM\HasLifecycleCallbacks]
 class Publication
@@ -42,14 +44,17 @@ class Publication
         minMessage: "Le message est trop court! (4 caractères minimum)",
         maxMessage: "Le message est trop long! (50 caractères maximum)"
     )]
+    #[Groups(['utilisateur:read'])]
     private ?string $message = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[ApiProperty(writable: false)]
+    #[Groups(['utilisateur:read'])]
     private ?\DateTimeInterface $datePublication = null;
 
     #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'publications')]
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
+    #[Groups(['utilisateur:read'])]
     private ?Utilisateur $auteur = null;
 
     public function getId(): ?int
