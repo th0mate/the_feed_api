@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use App\Repository\PublicationRepository;
 use Doctrine\DBAL\Types\Types;
@@ -23,6 +24,15 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(),
         new Delete(),
         new GetCollection(),
+        new GetCollection(
+            uriTemplate: '/utilisateurs/{idUtilisateur}/publications',
+            uriVariables: [
+                'idUtilisateur' => new Link(
+                    fromProperty: 'publications',
+                    fromClass: Utilisateur::class
+                )
+            ],
+        ),
     ],
     normalizationContext: ["groups" => ["utilisateur:read"]],
     order: ["datePublication" => "DESC"],
