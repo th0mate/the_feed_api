@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 /**
  * @extends ServiceEntityRepository<Utilisateur>
  */
-class UtilisateurRepository extends ServiceEntityRepository/* implements PasswordUpgraderInterface*/
+class UtilisateurRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -22,7 +22,6 @@ class UtilisateurRepository extends ServiceEntityRepository/* implements Passwor
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
-    /*
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         if (!$user instanceof Utilisateur) {
@@ -33,7 +32,7 @@ class UtilisateurRepository extends ServiceEntityRepository/* implements Passwor
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
-    */
+
 
     //    /**
     //     * @return Utilisateur[] Returns an array of Utilisateur objects
