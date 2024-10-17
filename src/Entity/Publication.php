@@ -21,8 +21,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(),
-        new Post(),
-        new Delete(),
+        new Post(security: "is_granted('ROLE_USER')"),
+        new Delete(security: "is_granted('ROLE_USER') and object.getOwner() == user"),
         new GetCollection(),
         new GetCollection(
             uriTemplate: '/utilisateurs/{idUtilisateur}/publications',

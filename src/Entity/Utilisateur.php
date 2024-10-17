@@ -35,10 +35,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
             validationContext: ["groups" => ["Default", "utilisateur:create"]],
             processor: UtilisateurProcessor::class
         ),
-        new Delete(),
+        new Delete(security: "is_granted('ROLE_USER') and object == user"),
         new GetCollection(),
         new Patch(
             denormalizationContext: ["groups" => ["utilisateur:update"]],
+            security: "is_granted('ROLE_USER') and object == user",
             validationContext: ["groups" => ["Default", "utilisateur:update"]],
             processor: UtilisateurProcessor::class
         ),
