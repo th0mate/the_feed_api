@@ -30,10 +30,18 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ApiResource(
     operations: [
         new Get(),
-        new Post(validationContext: ["groups" => ["Default", "utilisateur:create"]], processor: UtilisateurProcessor::class),
+        new Post(
+            denormalizationContext: ["groups" => ["utilisateur:create"]],
+            validationContext: ["groups" => ["Default", "utilisateur:create"]],
+            processor: UtilisateurProcessor::class
+        ),
         new Delete(),
         new GetCollection(),
-        new Patch(validationContext: ["groups" => ["Default", "utilisateur:update"]], processor: UtilisateurProcessor::class),
+        new Patch(
+            denormalizationContext: ["groups" => ["utilisateur:update"]],
+            validationContext: ["groups" => ["Default", "utilisateur:update"]],
+            processor: UtilisateurProcessor::class
+        ),
     ]
 )]
 class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
@@ -48,7 +56,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Length(min: 4, max: 20, minMessage: 'Il faut au moins 4 caractères!', maxMessage: 'Il faut au plus 20 caractères!')]
     #[Assert\NotBlank(groups: ['utilisateur:create'])]
     #[Assert\NotNull(groups: ['utilisateur:create'])]
-    #[Groups(['utilisateur:read'])]
+    #[Groups(['utilisateur:read', 'utilisateur:create'])]
     private ?string $login = null;
 
     /**
@@ -65,13 +73,14 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ApiProperty(readable: false)]
     #[Assert\NotBlank(groups: ['utilisateur:create'])]
     #[Assert\NotNull(groups: ['utilisateur:create'])]
+    #[Groups(['utilisateur:read', 'utilisateur:create', 'utilisateur:update'])]
     private ?string $plainPassword = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(groups: ['utilisateur:create'])]
     #[Assert\NotNull(groups: ['utilisateur:create'])]
     #[Assert\Email (message: 'L\'adresse mail n\'est pas valide')]
-    #[Groups(['utilisateur:read'])]
+    #[Groups(['utilisateur:read', 'utilisateur:create'])]
     private ?string $adresseMail = null;
 
     #[ORM\Column(options: ["default" => false])]
