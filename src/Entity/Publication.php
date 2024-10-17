@@ -10,6 +10,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use App\Repository\PublicationRepository;
+use App\State\PublicationProcessor;
+use App\State\UtilisateurProcessor;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -21,7 +23,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(),
-        new Post(security: "is_granted('ROLE_USER')"),
+        new Post(security: "is_granted('ROLE_USER')",
+            processor: PublicationProcessor::class
+        ),
         new Delete(security: "is_granted('ROLE_USER') and object.getOwner() == user"),
         new GetCollection(),
         new GetCollection(
@@ -65,6 +69,7 @@ class Publication
     #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'publications')]
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     #[Groups(['utilisateur:read'])]
+    #[ApiProperty(readable: false)]
     private ?Utilisateur $auteur = null;
 
     public function getId(): ?int
