@@ -13,3 +13,7 @@ lexik_jwt_authentication:
             enabled: true
             #Nom du cookie
             name: BEARER
+
+    blocklist_token:
+        enabled: true
+        cache: cache.app
