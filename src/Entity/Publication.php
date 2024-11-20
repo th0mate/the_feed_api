@@ -47,6 +47,7 @@ class Publication
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['utilisateur:read'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -69,7 +70,6 @@ class Publication
     #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'publications')]
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     #[Groups(['utilisateur:read'])]
-    #[ApiProperty(readable: false)]
     private ?Utilisateur $auteur = null;
 
     public function getId(): ?int
