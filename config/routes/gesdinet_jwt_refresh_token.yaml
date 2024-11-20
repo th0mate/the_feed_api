@@ -1,11 +1,8 @@
-gesdinet_jwt_refresh_token:
-    path: /api/token/refresh
-
 # Route pour rafraîchir notre JWT (on limite en POST)
 api_refresh_token:
-    path: /api/token/refresh
-    methods: ['POST']
+  path: /api/token/refresh
+  methods: [ 'POST' ]
 
 api_token_invalidate:
-    path: /api/token/invalidate
-    methods: ['POST']
+  path: /api/token/invalidate
+  methods: [ 'POST' ]
